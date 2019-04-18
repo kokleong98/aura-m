@@ -79,5 +79,3 @@ EOF
 sudo mv aura-m.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable aura.service
- 
- 
