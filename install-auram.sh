@@ -21,7 +21,7 @@ read -p "Enter new user account: " username
 
 Inst_Count=$(dpkg -s apt-transport-https ca-certificates curl software-properties-common docker-compose build-essential python npm | grep "Status: install ok installed" -c)
 
-if [ $Inst_Count -ne 8 ]
+if [ $Inst_Count -ne 8 ]; then
   sudo chmod +x add-aura.sh
   echo "Start Deploy aura."
   "${DIR}/add-aura.sh" $username
@@ -41,7 +41,7 @@ else
   if [ "$result" != "$username" ]; then
     echo "Adding $username to group $group."
     sudo usermod -aG sudo $username
-    if [ $? -ne 0 ]
+    if [ $? -ne 0 ];
     then
       echo "Fail to add $username to group $group. Abort installation."
       exit 1
@@ -78,4 +78,4 @@ EOF
 
 sudo mv aura-m.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable aura.service
+sudo systemctl enable aura-m.service
