@@ -4,11 +4,15 @@
 # FILENAME=add-aura.sh
 # DESCRIPTION=AURA-SM add aura services installation script
 ####################################################################
-read -p "Enter new username: " username
-sudo adduser $username
-if [ $? -ne 0 ]
-then
-  exit 1
+
+getent passwd $1 > /dev/null 2&>1
+if [ $? -eq 0 ]; then
+  echo "User account existed."
+  username=$1
+else
+  echo "User account created."
+  username=$1
+  sudo adduser $username
 fi
 
 sudo usermod -aG sudo $username
@@ -41,3 +45,5 @@ su $username << EOF
   nvm install 10.15
   npm install -g @auroradao/aurad-cli
 EOF
+
+exit 0
