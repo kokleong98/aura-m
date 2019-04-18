@@ -1,4 +1,9 @@
 #!/bin/bash
+####################  DO NOT REMOVE THESE LINES #################### 
+# VERSION=0.1.0 
+# FILENAME=add-aura.sh
+# DESCRIPTION=AURA-SM add aura services installation script
+####################################################################
 read -p "Enter new username: " username
 sudo adduser $username
 if [ $? -ne 0 ]
