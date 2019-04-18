@@ -9,7 +9,7 @@ license=$(curl -s https://raw.githubusercontent.com/kokleong98/aura-m/master/LIC
 echo -e "\e[1;33m$license\e[0m"
 read -p "Do you accept the license agreement? (y/n) " accept
 
-if [ accept != 'y' ]; then
+if [ "$accept" != "y" ]; then
   echo "Aborting installation."
   exit 0
 fi
