@@ -20,7 +20,7 @@ rand_pass=$(date +%s | sha256sum | base64 | head -c 4 ; echo)
 su $username << EOF
   sudo apt install apache2-utils nginx -y
   sudo touch "$DIR/.aurampasswd"
-  sudo htpasswd -c "$DIR/.aurampasswd" auram $rand_pass
+  sudo htpasswd -b "$DIR/.aurampasswd" auram $rand_pass
 EOF
 
 echo "Dashboard password: $rand_pass"

@@ -39,6 +39,14 @@ sudo systemctl enable aura-m.service
 
 sed -i "s/##username##/$username/g" "$DIR/start-auram.sh"
 
+if [ -f "$DIR/auram.conf" ]; then
+  read -p "auram.conf existed. Do you want keep the settings? (y/n) " keep_settings
+  if [ "$keep_settings" == "y" ]; then
+    echo "No changes on existing settings."
+    exit 0
+  fi
+fi
+
 read -p "Do you turn on aurad auto-update? (y/n) " update_auto_accept
 if [ "$update_auto_accept" != "y" ]; then
   update_auto=0
@@ -52,14 +60,6 @@ if [ "$rpc_option_accept" != "y" ]; then
 else
   read -p "Please enter your rpc endpoint address eg. https://mainnet.infura.io/v3/<your_project_id>. " rpc_url
   rpc_option=1
-fi
-
-if [ -f "$DIR/auram.conf" ]; then
-  read -p "auram.conf existed. Do you want keep the settings? (y/n) " keep_settings
-  if [ "$keep_settings" == "y" ]; then
-    echo "No changes on existing settings."
-    exit 0
-  fi
 fi
 
 cat > "$DIR/auram.conf" << EOF
