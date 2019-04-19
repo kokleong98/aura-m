@@ -18,7 +18,7 @@ fi
 function GetGitDependency()
 {
   filename="$1"
-  if [ ! -f "${DIR}/$filename" ]
+  if [ ! -f "${DIR}/$filename" ]; then
     echo "Downloading $filename."
     curl -O "https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename"
     ret="$?"
@@ -62,6 +62,10 @@ Inst_Count=$(dpkg -s apt-transport-https ca-certificates curl software-propertie
 
 if [ $Inst_Count -ne 8 ]; then
   GetGitDependency "add-aura.sh"
+  if [ $? -ne 0 ]; then
+    echo "Fail to get git file add-aura.sh depedency. Abort installation."
+    exit 1
+  fi
   echo "Start Deploy aura."
   "${DIR}/add-aura.sh" $username
   exitcode=$?
@@ -90,7 +94,19 @@ fi
 # 2. Check and prepare AURA-M scripts.
 #########################################
 GetGitDependency "start-auram.sh"
+if [ $? -ne 0 ]; then
+  echo "Fail to get git file start-auram.sh depedency. Abort installation."
+  exit 1
+fi
 GetGitDependency "stop-auram.sh"
+if [ $? -ne 0 ]; then
+  echo "Fail to get git file stop-auram.sh depedency. Abort installation."
+  exit 1
+fi
 GetGitDependency "add-auram-service.sh"
+if [ $? -ne 0 ]; then
+  echo "Fail to get git file add-auram-service.sh depedency. Abort installation."
+  exit 1
+fi
 
 "${DIR}/add-auram-service.sh" "$username" "$DIR"
