@@ -38,3 +38,38 @@ sudo systemctl daemon-reload
 sudo systemctl enable aura-m.service
 
 sed -i "s/##username##/$username/g" "$DIR/start-auram.sh"
+
+read -p "Do you turn on aurad auto-update? (y/n) " update_auto_accept
+if [ "$update_auto_accept" != "y" ]; then
+  update_auto=0
+else
+  update_auto=1
+fi
+
+read -p "Do you want to run aurad on rpc endpoint like infura.io? (y/n) " rpc_option_accept
+if [ "$rpc_option_accept" != "y" ]; then
+  rpc_option=0
+else
+  read -p "Please enter your rpc endpoint address eg. https://mainnet.infura.io/v3/<your_project_id>. " rpc_url
+  rpc_option=1
+fi
+
+cat > "$DIR/auram.conf" << EOF
+#staking offline count before restart aurad
+off_restart=3
+#staking offline cooling period after restart aurad
+off_cool=10
+#send mail on staking offline option
+sendmail=0
+#send mail on staking offline mail options
+mail_subject="AURA STAKING OFFLINE."
+mail_message="AURA STAKING OFFLINE."
+mail_to=""
+#aurad update notification option
+update_notify=0
+#external ethereum node option
+rpc_option=$rpc_option
+rpc_url="$rpc_url"
+stats_option=1
+update_auto=$update_auto
+EOF
