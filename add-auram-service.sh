@@ -4,7 +4,7 @@
 # FILENAME=install-auram.sh
 # DESCRIPTION=AURA-M systemd service installation script
 ####################################################################
-if [ $# -lt 1 ]
+if [ $# -lt 1 ]; then
   echo "Insufficient parameters."
   exit 1
 fi
