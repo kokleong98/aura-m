@@ -11,6 +11,8 @@ fi
 username="$1"
 DIR="$2"
 
+mkdir "$DIR/web"
+
 if [ -z "$DIR" ]; then
   DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
@@ -23,16 +25,13 @@ su $username << EOF
   sudo htpasswd -b "$DIR/.aurampasswd" auram $rand_pass
 EOF
 
+echo "Dashboard username: auram"
 echo "Dashboard password: $rand_pass"
 
 dashboard=$(grep "location /aura/" "/etc/nginx/sites-available/default" -c)
 
-if [ $dashboard -ne 0 ]; then
-  echo "Dashboard settings exist in nginx."
-  exit 0
-fi
-
-content="
+if [ $dashboard -eq 0 ]; then
+  content="
         location /aura/ {
                 try_files $uri $uri/ =404;
                 auth_basic ""Restricted Content"";
@@ -40,13 +39,20 @@ content="
         }
 "
 
-echo "Creating Web Dashboard configuration."
-cat > "$DIR/tmp.replace" << EOF
+  echo "Creating Web Dashboard configuration."
+  cat > "$DIR/tmp.replace" << EOF
 $content
 EOF
 
-sed -i "/root \/var\/www\/html;/a $DIR/tmp.replace" "/etc/nginx/sites-available/default"
+  sed -i "/root \/var\/www\/html;/a $DIR/tmp.replace" "/etc/nginx/sites-available/default"
 
-rm "$DIR/tmp.replace"
+  rm "$DIR/tmp.replace"
+else
+  echo "Dashboard settings exist in nginx."
+fi
+
+sudo ln -s "$DIR/web/" "/var/www/html/aura"
+sudo ln -s "$DIR/web/auram.html" "/var/www/html/aura/index.html"
+sudo nginx -s reload
 
 exit 0
