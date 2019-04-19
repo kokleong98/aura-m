@@ -15,13 +15,42 @@ if [ "$accept" != "y" ]; then
   exit 0
 fi
 
-function GetGitDependency(filename)
+function GetGitDependency()
 {
+  filename="$1"
   if [ ! -f "${DIR}/$filename" ]
     echo "Downloading $filename."
     curl -O "https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename"
+    ret="$?"
+    if [ $ret -ne 0 ]; then
+      echo "Fail to download https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename."
+      return $ret
+    fi
   fi
   sudo chmod +x "${DIR}/$filename"
+  return 0
+}
+
+function GetAccountDependency()
+{
+  group="$1"
+  user="$2"
+  result=$(awk -v group=$group -v user=$user -F':' '{if($1 == group && $4 == user) print $4}' /etc/group)
+  if [ "$result" != "$user" ]; then
+    echo "Adding $user to group $group."
+    sudo usermod -aG sudo $user
+    if [ $? -ne 0 ];
+    then
+      echo "Fail to add $user to group $group. Abort installation."
+      return 1
+    else
+      echo "Added $user to group $group sucessfully."
+      return 0
+    fi
+  else
+    echo "$user already belongs to group $group."
+    return 0
+  fi
 }
 
 #########################################
@@ -43,34 +72,18 @@ if [ $Inst_Count -ne 8 ]; then
   else
     echo "Deploy aura success."
   fi
-else
   echo "Aura dependencies existed. Skip aura installation."
-  group="docker"
-  user=$username
-  result=$(awk -v group=$group -v user=$user -F':' '{if($1 == group && $4 == user) print $4}' /etc/group)
-  if [ "$result" != "$username" ]; then
-    echo "Adding $username to group $group."
-    sudo usermod -aG sudo $username
-    if [ $? -ne 0 ];
-    then
-      echo "Fail to add $username to group $group. Abort installation."
-      exit 1
-    else
-      echo "Added $username to group $group sucessfully."
-    fi
-	group="sudo"
-    echo "Adding $username to group $group."
-    sudo usermod -aG sudo $username
-    if [ $? -ne 0 ];
-    then
-      echo "Fail to add $username to group $group. Abort installation."
-      exit 1
-    else
-      echo "Added $username to group $group sucessfully."
-    fi
-  else
-    echo "$username already belongs to group $group."
-  fi
+fi
+
+GetAccountDependency "docker" "$username"
+if [ $? -ne 0 ]; then
+  echo "Fail to add account $username to group docker depedency."
+  exit 1
+fi
+GetAccountDependency "sudo" "$username"
+if [ $? -ne 0 ]; then
+  echo "Fail to add account $username to group docker depedency."
+  exit 1
 fi
 
 #########################################
