@@ -4,13 +4,17 @@
 # FILENAME=add-aura.sh
 # DESCRIPTION=AURA-SM add aura services installation script
 ####################################################################
+if [ $# -lt 1 ]; then
+  echo "Insufficient parameters."
+  exit 1
+fi
 
 getent passwd $1 > /dev/null 2&>1
 if [ $? -eq 0 ]; then
   echo "User account existed."
   username=$1
 else
-  echo "User account created."
+  echo "Creating User account."
   username=$1
   sudo adduser $username
 fi

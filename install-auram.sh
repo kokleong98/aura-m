@@ -53,9 +53,9 @@ function GetAccountDependency()
   fi
 }
 
-#########################################
+#################################################################### 
 # 1. Deploying aura componenets
-#########################################
+#################################################################### 
 read -p "Enter new user account: " username
 
 Inst_Count=$(dpkg -s apt-transport-https ca-certificates curl software-properties-common docker-compose build-essential python npm | grep "Status: install ok installed" -c)
@@ -90,9 +90,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-#########################################
-# 2. Check and prepare AURA-M scripts.
-#########################################
+#################################################################### 
+# 2. Check and prepare AURA-M service scripts.
+#################################################################### 
 GetGitDependency "start-auram.sh"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file start-auram.sh depedency. Abort installation."
@@ -110,3 +110,15 @@ if [ $? -ne 0 ]; then
 fi
 
 "${DIR}/add-auram-service.sh" "$username" "$DIR"
+
+#################################################################### 
+# 3. Check and prepare AURA-M Web Dashboard scripts.
+#################################################################### 
+GetGitDependency "add-web-dashboard.sh"
+if [ $? -ne 0 ]; then
+  echo "Fail to get git file add-web-dashboard.sh depedency. Abort installation."
+  exit 1
+fi
+
+"${DIR}/add-web-dashboard.sh" "$username" "$DIR"
+
