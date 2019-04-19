@@ -35,8 +35,8 @@ function GetAccountDependency()
 {
   group="$1"
   user="$2"
-  result=$(groups "$user" | grep -e " $group " -e " $group$")
-  if [ "$result" != "$user" ]; then
+  result=$(groups "$user" | grep -e " $group " -e " $group$" -c)
+  if [ "$result" -eq 0 ]; then
     echo "Adding $user to group $group."
     sudo usermod -aG sudo $user
     if [ $? -ne 0 ];
