@@ -35,7 +35,7 @@ function GetAccountDependency()
 {
   group="$1"
   user="$2"
-  result=$(awk -v group=$group -v user=$user -F':' '{if($1 == group && $4 == user) print $4}' /etc/group)
+  result=$(groups "$user" | grep -e " $group " -e " $group$")
   if [ "$result" != "$user" ]; then
     echo "Adding $user to group $group."
     sudo usermod -aG sudo $user
