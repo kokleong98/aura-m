@@ -58,7 +58,7 @@ if [ -f "$DIR/auram.conf" ]; then
   read -p "auram.conf existed. Do you want keep the settings? (y/n) " keep_settings
   if [ "$keep_settings" == "y" ]; then
     echo "No changes on existing settings."
-    return 0
+    exit 0
   fi
 fi
 
@@ -83,3 +83,4 @@ update_auto=$update_auto
 EOF
 
 echo "New settings configured."
+exit 0
