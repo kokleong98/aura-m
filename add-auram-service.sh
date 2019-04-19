@@ -15,7 +15,7 @@ if [ -z "$DIR" ]; then
   DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
 #########################################
-# 4. Create AURA-M systemd service file
+# 1. Create AURA-M systemd service file
 #########################################
 cat > aura-m.service << EOF
 [Unit]
@@ -36,3 +36,5 @@ EOF
 sudo mv aura-m.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable aura-m.service
+
+sed -i "s/##username##/$username/g" "$DIR/start-auram.sh"
