@@ -59,7 +59,7 @@ printConfiguration()
 
 initVariables()
 {
-  sysminutes=$(($(date +"%-M")))
+  sysminutes=$(($(date -u +"%-M")))
   off_count=0
   off_count_cool=0
   lastminutes=-1
@@ -139,6 +139,11 @@ parseEthBlockNumber()
   blocknum=$((16#$(echo ${1:1:-1} | cut -d '"' -f10 | sed 's/0x//g')))
 }
 
+dumpServiceLogs()
+{
+  journalctl --unit=aura-m.service -n 100 --no-pager > "$DIR/web/data/logs.txt"
+}
+
 checkEthBlockNumber()
 {
   jresult=$(curl -s "https://api.etherscan.io/api?module=proxy&action=eth_blockNumber&apikey=YourApiKeyToken")
@@ -181,6 +186,7 @@ waitAuradBlockSync()
     fi
     lastblocknum=$processingblock
     sleep 50
+    dumpServiceLogs
   done
   #Extra wait time for aurad container to active running
   blockdiff=$((blocknum - processingblock))
@@ -215,7 +221,7 @@ formatJson()
 logStatistics()
 {
   stat_interval=$interval
-  stat_time=$(date +%Y%m%d%H%M%S)
+  stat_time=$(date -u +%Y%m%d%H%M%S)
   ppid=$(pidof parity)
   if [ ! -z "$ppid" ]; then
     psout=$(ps -p $ppid -o %cpu,vsz,rss --no-headers)
@@ -289,6 +295,7 @@ logStatistics()
   fi
   cat >> "${DIR}/stats/${stat_time:0:8}.txt" <<< "$logline"
   "${DIR}/node-json.sh" 1 "$(date -u +%Y-%m-%d)" "${DIR}/web/data/"
+  dumpServiceLogs
 }
 
 startAura()
