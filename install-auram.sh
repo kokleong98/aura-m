@@ -19,7 +19,7 @@ function GetGitDependency()
 {
   filename="$1"
   path="$2"
-  if [ ! -f "${DIR}/$filename" ]; then
+  if [ ! -f "$path/$filename" ]; then
     echo "Downloading $filename."
     curl "https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename" > "$path/$filename"
     ret="$?"
@@ -28,7 +28,7 @@ function GetGitDependency()
       return $ret
     fi
   fi
-  sudo chmod +x "${DIR}/$filename"
+  sudo chmod +x "$path/$filename"
   return 0
 }
 
