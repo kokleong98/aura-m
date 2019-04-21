@@ -44,7 +44,7 @@ if [ $dashboard -eq 0 ]; then
 $content
 EOF
 
-  sed -i "/root \/var\/www\/html;/a $DIR/tmp.replace" "/etc/nginx/sites-available/default"
+  sed -i "/root \/var\/www\/html;/r $DIR/tmp.replace" "/etc/nginx/sites-available/default"
 
   rm "$DIR/tmp.replace"
 else
