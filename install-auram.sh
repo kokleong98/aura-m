@@ -106,6 +106,11 @@ if [ $? -ne 0 ]; then
   echo "Fail to get git file stop-auram.sh depedency. Abort installation."
   exit 1
 fi
+GetGitDependency "node-json.sh" "/home/$username/.auram"
+if [ $? -ne 0 ]; then
+  echo "Fail to get git file node-json.sh depedency. Abort installation."
+  exit 1
+fi
 GetGitDependency "add-auram-service.sh" "$DIR"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file add-auram-service.sh depedency. Abort installation."
@@ -117,7 +122,7 @@ fi
 #################################################################### 
 # 3. Check and prepare AURA-M Web Dashboard scripts.
 #################################################################### 
-GetGitDependency "auram.html" "/home/$username/.auram"
+GetGitDependency "auram.html" "/home/$username/.auram" ".html"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file add-web-dashboard.sh depedency. Abort installation."
   exit 1
