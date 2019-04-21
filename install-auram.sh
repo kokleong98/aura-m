@@ -115,7 +115,7 @@ fi
 #################################################################### 
 # 3. Check and prepare AURA-M Web Dashboard scripts.
 #################################################################### 
-GetGitDependency "add-web-dashboard.sh"
+GetGitDependency "add-web-dashboard.sh" "$DIR"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file add-web-dashboard.sh depedency. Abort installation."
   exit 1
