@@ -75,7 +75,7 @@ function GetAccountDependency()
       return 0
     fi
   else
-    ShowError "\e[1;41m$user\e[1;31m already belongs to group \e[1;41m$group\e[1;31m."
+    ShowWarning "\e[1;41m$user\e[1;31m already belongs to group \e[1;41m$group\e[1;31m."
     return 0
   fi
 }
