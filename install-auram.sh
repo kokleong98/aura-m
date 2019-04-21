@@ -149,3 +149,20 @@ fi
 
 "$DIR/add-web-dashboard.sh" "$username" "/home/$username/.auram"
 
+#################################################################### 
+# 4. Check and prepare AURA-M helper scripts.
+#################################################################### 
+GetGitDependency "add-auram-alias.sh" "/home/$username/.auram" "" "$username:$username"
+if [ $? -ne 0 ]; then
+  echo "Fail to get git file add-auram-alias.sh depedency. Abort installation."
+  exit 1
+fi
+helper=$(grep "add-auram-alias.sh" "/home/$username/.bashrc" -c)
+if [ $helper -eq 0 ]; then
+  cat >> "/home/$username/.bashrc" << EOF
+source "/home/$username/.auram/add-auram-alias.sh"
+EOF
+  echo "Helper script added."
+else
+  echo "Helper script existed."
+fi

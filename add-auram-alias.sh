@@ -6,12 +6,12 @@
 ####################################################################
 function auram() {
   if [ "$1" == "start" ]; then
-    sudo systemctl start auram
+    sudo systemctl start aura-m
   elif [ "$1" == "stop" ]; then
-    sudo systemctl stop auram
+    sudo systemctl stop aura-m
   elif [ "$1" == "status" ]; then
-    sudo systemctl status auram
+    sudo systemctl status aura-m
   elif [ "$1" == "logs" ]; then
-    sudo journalctl -u auram -f
+    sudo journalctl -u aura-m -f
   fi
 }
