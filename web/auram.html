@@ -132,7 +132,7 @@
       }
     }
 
-    var pastdate = moment().subtract(1, 'days');
+    var pastdate = moment().utc().subtract(1, 'days');
 
     function buildPastChart(data){
 
@@ -296,10 +296,11 @@
             $('input[name="pastday"]').daterangepicker({
               singleDatePicker: true,
               showDropdowns: true,
-              startDate: moment().subtract(1, 'days'),
-              endDate: moment().subtract(1, 'days'),
+              startDate: moment().utc().subtract(1, 'days').format('YYYY-MM-DD'),
+              endDate: moment().utc().subtract(1, 'days').format('YYYY-MM-DD'),
               autoApply: true,
-              autoUpdateInput: true
+              autoUpdateInput: true,
+              format: 'YYYY-MM-DD'
             }, eventDateClick);
           });
         </script>
