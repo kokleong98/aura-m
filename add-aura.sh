@@ -16,7 +16,7 @@ if [ $? -eq 0 ]; then
 else
   echo "Creating User account."
   username=$1
-  sudo adduser --gecos $username
+  sudo adduser --gecos "" $username
 fi
 
 sudo usermod -aG sudo $username
