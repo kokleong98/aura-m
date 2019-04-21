@@ -28,7 +28,9 @@ function GetGitDependency()
       return $ret
     fi
   fi
-  sudo chmod +x "$path/$filename"
+  if [ -z "$3" ]; then
+    sudo chmod +x "$path/$filename"
+  fi
   return 0
 }
 
@@ -115,6 +117,12 @@ fi
 #################################################################### 
 # 3. Check and prepare AURA-M Web Dashboard scripts.
 #################################################################### 
+GetGitDependency "auram.html" "/home/$username/.auram"
+if [ $? -ne 0 ]; then
+  echo "Fail to get git file add-web-dashboard.sh depedency. Abort installation."
+  exit 1
+fi
+
 GetGitDependency "add-web-dashboard.sh" "$DIR"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file add-web-dashboard.sh depedency. Abort installation."

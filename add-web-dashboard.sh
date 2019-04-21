@@ -35,7 +35,7 @@ if [ $dashboard -eq 0 ]; then
         location /aura/ {
                 try_files $uri $uri/ =404;
                 auth_basic \"Restricted Content\";
-                auth_basic_user_file ""$DIR/.aurampasswd"";
+                auth_basic_user_file $DIR/.aurampasswd;
         }
 "
 
