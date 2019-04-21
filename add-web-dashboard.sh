@@ -55,4 +55,11 @@ sudo ln -s "$DIR/web/" "/var/www/html/aura"
 sudo ln -s "$DIR/web/auram.html" "/var/www/html/aura/index.html"
 sudo nginx -s reload
 
+test=$(curl -u auram:$rand_pass --head -s http://localhost/aura/auram.html | grep 'HTTP/1.1 200 OK' -c)
+if [ "$test" -eq 1 ]; then
+  echo "Nginx configured successfully."
+else
+  echo "Nginx configuration failed."
+fi
+
 exit 0
