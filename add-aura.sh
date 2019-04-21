@@ -48,8 +48,8 @@ su $username << EOF
   source ".nvm/nvm.sh"
   nvm install 10.15
   npm install -g @auroradao/aurad-cli
+  mkdir "/home/$username/.auram/"
 EOF
 
-mkdir "/home/$username/.auram/"
 
 exit 0
