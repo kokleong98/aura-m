@@ -110,7 +110,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-"/home/$username/.auram/add-auram-service.sh" "$username" "/home/$username/.auram"
+"$DIR/add-auram-service.sh" "$username" "/home/$username/.auram"
 
 #################################################################### 
 # 3. Check and prepare AURA-M Web Dashboard scripts.
