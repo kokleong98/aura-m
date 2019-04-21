@@ -51,9 +51,11 @@ else
   echo "Dashboard settings exist in nginx."
 fi
 
+su $username << EOF
 sudo ln -s "$DIR/web/" "/var/www/html/aura"
 sudo ln -s "$DIR/web/auram.html" "/var/www/html/aura/index.html"
 sudo nginx -s reload
+EOF
 
 test=$(curl -u auram:$rand_pass --head -s http://localhost/aura/auram.html | grep 'HTTP/1.1 200 OK' -c)
 if [ "$test" -eq 1 ]; then
