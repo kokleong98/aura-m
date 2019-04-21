@@ -52,9 +52,9 @@ else
 fi
 
 su $username << EOF
+sudo nginx -s reload
 sudo ln -s "$DIR/web/" "/var/www/html/aura"
 sudo ln -s "$DIR/web/auram.html" "/var/www/html/aura/index.html"
-sudo nginx -s reload
 EOF
 
 test=$(curl -u auram:$rand_pass --head -s http://localhost/aura/auram.html | grep 'HTTP/1.1 200 OK' -c)
