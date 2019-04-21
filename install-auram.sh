@@ -135,9 +135,9 @@ if [ ! -d "/home/$username/.auram/web" ]; then
   sudo chown $username:$username  "/home/$username/.auram/web"
 fi
 
-GetGitDependency "auram.html" "/home/$username/.auram/web" ".html" "$username:$username"
+GetGitDependency "web/auram.html" "/home/$username/.auram" ".html" "$username:$username"
 if [ $? -ne 0 ]; then
-  echo "Fail to get git file add-web-dashboard.sh depedency. Abort installation."
+  echo "Fail to get git file auram.html depedency. Abort installation."
   exit 1
 fi
 
