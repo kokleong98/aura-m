@@ -33,7 +33,7 @@ dashboard=$(grep "location /aura/" "/etc/nginx/sites-available/default" -c)
 if [ $dashboard -eq 0 ]; then
   content="
         location /aura/ {
-                try_files $uri $uri/ =404;
+                try_files \$uri \$uri/ =404;
                 auth_basic \"Restricted Content\";
                 auth_basic_user_file $DIR/.aurampasswd;
         }

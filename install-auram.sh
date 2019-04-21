@@ -31,6 +31,9 @@ function GetGitDependency()
   if [ -z "$3" ]; then
     sudo chmod +x "$path/$filename"
   fi
+  if [ ! -z "$4" ]; then
+    sudo chown "$4" "$path/$filename"
+  fi
   return 0
 }
 
@@ -96,6 +99,11 @@ fi
 #################################################################### 
 # 2. Check and prepare AURA-M service scripts.
 #################################################################### 
+if [ ! -d "/home/$username/.auram" ]; then
+  mkdir -p "/home/$username/.auram"
+  sudo chown $username:$username  "/home/$username/.auram"
+fi
+
 GetGitDependency "start-auram.sh" "/home/$username/.auram"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file start-auram.sh depedency. Abort installation."
@@ -122,7 +130,12 @@ fi
 #################################################################### 
 # 3. Check and prepare AURA-M Web Dashboard scripts.
 #################################################################### 
-GetGitDependency "auram.html" "/home/$username/.auram/web" ".html"
+if [ ! -d "/home/$username/.auram/web" ]; then
+  mkdir -p "/home/$username/.auram/web"
+  sudo chown $username:$username  "/home/$username/.auram/web"
+fi
+
+GetGitDependency "auram.html" "/home/$username/.auram/web" ".html" "$username:$username"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file add-web-dashboard.sh depedency. Abort installation."
   exit 1
