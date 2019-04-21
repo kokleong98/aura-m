@@ -5,26 +5,47 @@
 # DESCRIPTION=AURA-M Main installation script
 #################################################################### 
 
+function ShowWarning()
+{
+  echo -e "\e[1;33m$1\e[0m"
+}
+
+function ShowSuccess()
+{
+  echo -e "\e[1;32m$1\e[0m"
+}
+
+function ShowError()
+{
+  echo -e "\e[1;31m$1\e[0m"
+}
+
+function ShowAction()
+{
+  echo -e "\e[1;36m$1\e[0m"
+}
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 license=$(curl -s https://raw.githubusercontent.com/kokleong98/aura-m/master/LICENSE)
-echo -e "\e[1;33m$license\e[0m"
+ShowWarning "$license"
 read -p "Do you accept the license agreement? (y/n) " accept
 
 if [ "$accept" != "y" ]; then
-  echo "Aborting installation."
+  ShowError "Aborting installation."
   exit 0
 fi
+
 
 function GetGitDependency()
 {
   filename="$1"
   path="$2"
   if [ ! -f "$path/$filename" ]; then
-    echo "Downloading $filename."
+    ShowAction "Downloading $filename."
     curl "https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename" > "$path/$filename"
     ret="$?"
     if [ $ret -ne 0 ]; then
-      echo "Fail to download https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename."
+      ShowError "Fail to download https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename."
       return $ret
     fi
   fi
@@ -43,18 +64,18 @@ function GetAccountDependency()
   user="$2"
   result=$(groups "$user" | grep -e " $group " -e " $group$" -c)
   if [ "$result" -eq 0 ]; then
-    echo "Adding $user to group $group."
+    ShowAction "Adding $user to group $group."
     sudo usermod -aG sudo $user
     if [ $? -ne 0 ];
     then
-      echo "Fail to add $user to group $group. Abort installation."
+      ShowError "Fail to add \e[1;41m$user\e[1;31m to group \e[1;41m$group\e[1;31m. Abort installation."
       return 1
     else
-      echo "Added $user to group $group sucessfully."
+      ShowSuccess "Added \e[1;42m$user\e[1;32m to group \e[1;42m$group\e[1;32m sucessfully."
       return 0
     fi
   else
-    echo "$user already belongs to group $group."
+    ShowError "\e[1;41m$user\e[1;31m already belongs to group \e[1;41m$group\e[1;31m."
     return 0
   fi
 }
@@ -69,30 +90,30 @@ Inst_Count=$(dpkg -s apt-transport-https ca-certificates curl software-propertie
 if [ $Inst_Count -ne 8 ]; then
   GetGitDependency "add-aura.sh" "$DIR"
   if [ $? -ne 0 ]; then
-    echo "Fail to get git file add-aura.sh depedency. Abort installation."
+    ShowError "Fail to get git file add-aura.sh depedency. Abort installation."
     exit 1
   fi
-  echo "Start Deploy aura."
+  ShowAction "Start Deploy aura."
   "${DIR}/add-aura.sh" $username
   exitcode=$?
 
   if [ $exitcode -ne 0 ]; then
-    echo "Deploy aura failed."
+    ShowError "Deploy aura failed."
     exit exitcode
   else
-    echo "Deploy aura success."
+    ShowSuccess "Deploy aura success."
   fi
-  echo "Aura dependencies existed. Skip aura installation."
+  ShowAction "Aura dependencies existed. Skip aura installation."
 fi
 
 GetAccountDependency "docker" "$username"
 if [ $? -ne 0 ]; then
-  echo "Fail to add account $username to group docker depedency."
+  ShowError "Fail to add account $username to group docker depedency."
   exit 1
 fi
 GetAccountDependency "sudo" "$username"
 if [ $? -ne 0 ]; then
-  echo "Fail to add account $username to group docker depedency."
+  ShowError "Fail to add account $username to group docker depedency."
   exit 1
 fi
 
@@ -106,22 +127,22 @@ fi
 
 GetGitDependency "start-auram.sh" "/home/$username/.auram"
 if [ $? -ne 0 ]; then
-  echo "Fail to get git file start-auram.sh depedency. Abort installation."
+  ShowError "Fail to get git file start-auram.sh depedency. Abort installation."
   exit 1
 fi
 GetGitDependency "stop-auram.sh" "/home/$username/.auram"
 if [ $? -ne 0 ]; then
-  echo "Fail to get git file stop-auram.sh depedency. Abort installation."
+  ShowError "Fail to get git file stop-auram.sh depedency. Abort installation."
   exit 1
 fi
 GetGitDependency "node-json.sh" "/home/$username/.auram"
 if [ $? -ne 0 ]; then
-  echo "Fail to get git file node-json.sh depedency. Abort installation."
+  ShowError "Fail to get git file node-json.sh depedency. Abort installation."
   exit 1
 fi
 GetGitDependency "add-auram-service.sh" "$DIR"
 if [ $? -ne 0 ]; then
-  echo "Fail to get git file add-auram-service.sh depedency. Abort installation."
+  ShowError "Fail to get git file add-auram-service.sh depedency. Abort installation."
   exit 1
 fi
 
@@ -137,13 +158,13 @@ fi
 
 GetGitDependency "web/auram.html" "/home/$username/.auram" ".html" "$username:$username"
 if [ $? -ne 0 ]; then
-  echo "Fail to get git file auram.html depedency. Abort installation."
+  ShowError "Fail to get git file auram.html depedency. Abort installation."
   exit 1
 fi
 
 GetGitDependency "add-web-dashboard.sh" "$DIR"
 if [ $? -ne 0 ]; then
-  echo "Fail to get git file add-web-dashboard.sh depedency. Abort installation."
+  ShowError "Fail to get git file add-web-dashboard.sh depedency. Abort installation."
   exit 1
 fi
 
@@ -154,7 +175,7 @@ fi
 #################################################################### 
 GetGitDependency "add-auram-alias.sh" "/home/$username/.auram" "" "$username:$username"
 if [ $? -ne 0 ]; then
-  echo "Fail to get git file add-auram-alias.sh depedency. Abort installation."
+  ShowError "Fail to get git file add-auram-alias.sh depedency. Abort installation."
   exit 1
 fi
 helper=$(grep "add-auram-alias.sh" "/home/$username/.bashrc" -c)

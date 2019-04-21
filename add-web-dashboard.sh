@@ -4,8 +4,29 @@
 # FILENAME=add-web-dashboard.sh
 # DESCRIPTION=AURA-M add web dashboard installation script
 ####################################################################
+
+function ShowWarning()
+{
+  echo -e "\e[1;33m$1\e[0m"
+}
+
+function ShowSuccess()
+{
+  echo -e "\e[1;32m$1\e[0m"
+}
+
+function ShowError()
+{
+  echo -e "\e[1;31m$1\e[0m"
+}
+
+function ShowAction()
+{
+  echo -e "\e[1;36m$1\e[0m"
+}
+
 if [ $# -lt 1 ]; then
-  echo "Insufficient parameters."
+  ShowError "Insufficient parameters."
   exit 1
 fi
 username="$1"
@@ -25,8 +46,8 @@ su $username << EOF
   sudo htpasswd -b "$DIR/.aurampasswd" auram $rand_pass
 EOF
 
-echo "Dashboard username: auram"
-echo "Dashboard password: $rand_pass"
+ShowAction "Dashboard username: \e[1;44mauram"
+ShowAction "Dashboard password: \e[1;44m$rand_pass"
 
 dashboard=$(grep "location /aura/" "/etc/nginx/sites-available/default" -c)
 
@@ -39,7 +60,7 @@ if [ $dashboard -eq 0 ]; then
         }
 "
 
-  echo "Creating Web Dashboard configuration."
+  ShowAction "Creating Web Dashboard configuration."
   cat > "$DIR/tmp.replace" << EOF
 $content
 EOF
@@ -48,7 +69,7 @@ EOF
 
   rm "$DIR/tmp.replace"
 else
-  echo "Dashboard settings exist in nginx."
+  ShowAction "Dashboard settings exist in nginx."
 fi
 
 su $username << EOF
@@ -59,9 +80,9 @@ EOF
 
 test=$(curl -u auram:$rand_pass --head -s http://localhost/aura/auram.html | grep 'HTTP/1.1 200 OK' -c)
 if [ "$test" -eq 1 ]; then
-  echo "Nginx configured successfully."
+  ShowSuccess "Nginx configured successfully."
 else
-  echo "Nginx configuration failed."
+  ShowError "Nginx configuration failed."
 fi
 
 exit 0

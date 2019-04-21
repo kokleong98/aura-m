@@ -4,8 +4,29 @@
 # FILENAME=install-auram.sh
 # DESCRIPTION=AURA-M systemd service installation script
 ####################################################################
+
+function ShowWarning()
+{
+  echo -e "\e[1;33m$1\e[0m"
+}
+
+function ShowSuccess()
+{
+  echo -e "\e[1;32m$1\e[0m"
+}
+
+function ShowError()
+{
+  echo -e "\e[1;31m$1\e[0m"
+}
+
+function ShowAction()
+{
+  echo -e "\e[1;36m$1\e[0m"
+}
+
 if [ $# -lt 1 ]; then
-  echo "Insufficient parameters."
+  ShowError "Insufficient parameters."
   exit 1
 fi
 username="$1"
@@ -42,7 +63,7 @@ sed -i "s/##username##/$username/g" "$DIR/start-auram.sh"
 if [ -f "$DIR/auram.conf" ]; then
   read -p "auram.conf existed. Do you want keep the settings? (y/n) " keep_settings
   if [ "$keep_settings" == "y" ]; then
-    echo "No changes on existing settings."
+    ShowAction "No changes on existing settings."
     exit 0
   fi
 fi
@@ -82,5 +103,5 @@ stats_option=1
 update_auto=$update_auto
 EOF
 
-echo "New settings configured."
+ShowAction "New settings configured."
 exit 0
