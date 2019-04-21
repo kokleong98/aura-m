@@ -50,4 +50,6 @@ su $username << EOF
   npm install -g @auroradao/aurad-cli
 EOF
 
+mkdir "/home/$username/.auram/"
+
 exit 0

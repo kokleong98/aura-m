@@ -18,9 +18,10 @@ fi
 function GetGitDependency()
 {
   filename="$1"
+  path="$2"
   if [ ! -f "${DIR}/$filename" ]; then
     echo "Downloading $filename."
-    curl -O "https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename"
+    curl "https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename" > "$path/$filename"
     ret="$?"
     if [ $ret -ne 0 ]; then
       echo "Fail to download https://raw.githubusercontent.com/kokleong98/aura-m/master/$filename."
@@ -61,7 +62,7 @@ read -p "Enter new user account: " username
 Inst_Count=$(dpkg -s apt-transport-https ca-certificates curl software-properties-common docker-compose build-essential python npm | grep "Status: install ok installed" -c)
 
 if [ $Inst_Count -ne 8 ]; then
-  GetGitDependency "add-aura.sh"
+  GetGitDependency "add-aura.sh" "$DIR"
   if [ $? -ne 0 ]; then
     echo "Fail to get git file add-aura.sh depedency. Abort installation."
     exit 1
@@ -93,23 +94,23 @@ fi
 #################################################################### 
 # 2. Check and prepare AURA-M service scripts.
 #################################################################### 
-GetGitDependency "start-auram.sh"
+GetGitDependency "start-auram.sh" "/home/$username/.auram"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file start-auram.sh depedency. Abort installation."
   exit 1
 fi
-GetGitDependency "stop-auram.sh"
+GetGitDependency "stop-auram.sh" "/home/$username/.auram"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file stop-auram.sh depedency. Abort installation."
   exit 1
 fi
-GetGitDependency "add-auram-service.sh"
+GetGitDependency "add-auram-service.sh" "$DIR"
 if [ $? -ne 0 ]; then
   echo "Fail to get git file add-auram-service.sh depedency. Abort installation."
   exit 1
 fi
 
-"${DIR}/add-auram-service.sh" "$username" "$DIR"
+"/home/$username/.auram/add-auram-service.sh" "$username" "/home/$username/.auram"
 
 #################################################################### 
 # 3. Check and prepare AURA-M Web Dashboard scripts.
@@ -120,5 +121,5 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-"${DIR}/add-web-dashboard.sh" "$username" "$DIR"
+"$DIR/add-web-dashboard.sh" "$username" "/home/$username/.auram"
 
