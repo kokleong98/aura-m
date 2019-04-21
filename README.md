@@ -1,5 +1,6 @@
 # aura-m
 Aura Monitoring Service
+![alt text](https://raw.githubusercontent.com/kokleong98/aura-m/master/docs/panel-design.png)
 
 Installation command
 ```
