@@ -176,7 +176,7 @@ waitAuradBlockSync()
     fi
     if [ ! -z "$processingblock" ] && [ ! -z "$lastblocknum" ]  && [ $lastblocknum -eq $processingblock ]; then
       stuck_count=$((stuck_count+1))
-      if [ $stuck_count -ge 3 ]; then
+      if [ $stuck_count -ge 10 ]; then
         echo "Aurad container block sync stuck. Restarting aurad cointainer."
         docker restart docker_aurad_1
         stuck_count=0
