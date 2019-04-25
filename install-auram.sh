@@ -125,6 +125,11 @@ if [ ! -d "/home/$username/.auram" ]; then
   sudo chown $username:$username  "/home/$username/.auram"
 fi
 
+if [ ! -d "/home/$username/.auram/stats" ]; then
+  mkdir -p "/home/$username/.auram/stats"
+  sudo chown $username:$username  "/home/$username/.auram/stats"
+fi
+
 GetGitDependency "start-auram.sh" "/home/$username/.auram"
 if [ $? -ne 0 ]; then
   ShowError "Fail to get git file start-auram.sh depedency. Abort installation."
