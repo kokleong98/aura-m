@@ -19,6 +19,10 @@ Run the following command to start auram monitoring.
 ```
 auram start
 ```
+Browse your web dasbboard url and login with pre-generated username and password during installation.
+http://your_server_ip/aura/
+You may change the password or add new username using auram pass command.
+
 # Common commands
 Add / Change dashboard password
 ```
