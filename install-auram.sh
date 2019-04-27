@@ -156,6 +156,12 @@ fi
 #################################################################### 
 # 3. Check and prepare AURA-M Web Dashboard scripts.
 #################################################################### 
+GetAccountDependency "systemd-journal" "$username"
+if [ $? -ne 0 ]; then
+  ShowError "Fail to add account $username to group systemd-journal depedency."
+  exit 1
+fi
+
 if [ ! -d "/home/$username/.auram/web" ]; then
   mkdir -p "/home/$username/.auram/web"
   sudo chown $username:$username  "/home/$username/.auram/web"
