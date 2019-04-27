@@ -65,7 +65,7 @@ function GetAccountDependency()
   result=$(groups "$user" | grep -e " $group " -e " $group$" -c)
   if [ "$result" -eq 0 ]; then
     ShowAction "Adding $user to group $group."
-    sudo usermod -aG sudo $user
+    sudo usermod -aG $group $user
     if [ $? -ne 0 ];
     then
       ShowError "Fail to add \e[1;41m$user\e[1;31m to group \e[1;41m$group\e[1;31m. Abort installation."
