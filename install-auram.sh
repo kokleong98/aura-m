@@ -188,6 +188,7 @@ if [ $helper -eq 0 ]; then
   cat >> "/home/$username/.bashrc" << EOF
 source "/home/$username/.auram/add-auram-alias.sh"
 EOF
+  source "/home/$username/.auram/add-auram-alias.sh"
   echo "Helper script added."
 else
   echo "Helper script existed."
