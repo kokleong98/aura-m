@@ -161,6 +161,11 @@ if [ ! -d "/home/$username/.auram/web" ]; then
   sudo chown $username:$username  "/home/$username/.auram/web"
 fi
 
+if [ ! -d "/home/$username/.auram/web/data" ]; then
+  mkdir -p "/home/$username/.auram/web/data"
+  sudo chown $username:$username  "/home/$username/.auram/web/data"
+fi
+
 GetGitDependency "web/auram.html" "/home/$username/.auram" ".html" "$username:$username"
 if [ $? -ne 0 ]; then
   ShowError "Fail to get git file auram.html depedency. Abort installation."
