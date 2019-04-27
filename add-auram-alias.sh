@@ -4,6 +4,8 @@
 # FILENAME=install-auram-alias.sh
 # DESCRIPTION=AURA-M add command aliases installation script
 ####################################################################
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 function auram() {
   if [ "$1" == "start" ]; then
     sudo systemctl start aura-m
@@ -12,6 +14,12 @@ function auram() {
   elif [ "$1" == "status" ]; then
     sudo systemctl status aura-m
   elif [ "$1" == "logs" ]; then
-    sudo journalctl -u aura-m -f
+     journalctl -u aura-m -f
+  elif [ "$1" == "pass" ]; then
+     if [ ! -z "$2" ] && [ ! -z "$3" ]; then
+       sudo htpasswd -b "$DIR/.aurampasswd" "$2" "$3"
+     else
+       echo "Required in following format. auram pass <username> <password>"
+     fi
   fi
 }
