@@ -16,10 +16,12 @@ function auram() {
   elif [ "$1" == "logs" ]; then
      journalctl -u aura-m -f
   elif [ "$1" == "pass" ]; then
-     if [ ! -z "$2" ] && [ ! -z "$3" ]; then
-       sudo htpasswd -b "$DIR/.aurampasswd" "$2" "$3"
-     else
-       echo "Required in following format. auram pass <username> <password>"
-     fi
+    if [ ! -z "$2" ] && [ ! -z "$3" ]; then
+      sudo htpasswd -b "$DIR/.aurampasswd" "$2" "$3"
+    else
+      echo "Required in following format. auram pass <username> <password>"
+    fi
+  else
+    echo "Unknown auram command."
   fi
 }
