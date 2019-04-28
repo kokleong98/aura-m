@@ -85,9 +85,9 @@ function GetAccountDependency()
 #################################################################### 
 read -p "Enter new user account: " username
 
-Inst_Count=$(dpkg -s apt-transport-https ca-certificates curl software-properties-common docker-compose build-essential python npm | grep "Status: install ok installed" -c)
+Inst_Count=$(dpkg -s apt-transport-https ca-certificates curl software-properties-common docker-compose build-essential python npm gawk | grep "Status: install ok installed" -c)
 
-if [ $Inst_Count -ne 8 ]; then
+if [ $Inst_Count -ne 9 ]; then
   GetGitDependency "add-aura.sh" "$DIR"
   if [ $? -ne 0 ]; then
     ShowError "Fail to get git file add-aura.sh depedency. Abort installation."
