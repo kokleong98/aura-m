@@ -59,6 +59,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable aura-m.service
 
 sed -i "s/##username##/$username/g" "$DIR/start-auram.sh"
+sed -i "s/##username##/$username/g" "$DIR/stop-auram.sh"
 
 if [ -f "$DIR/auram.conf" ]; then
   read -p "auram.conf existed. Do you want keep the settings? (y/n) " keep_settings
