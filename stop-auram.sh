@@ -11,5 +11,5 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ -f "${DIR}/auram.detach" ]; then
   echo "Aura monitor detached."
 else
-  aura stop
+  idex stop
 fi

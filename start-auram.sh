@@ -67,21 +67,21 @@ initVariables()
   logs_aurad=""
   if [ $rpc_option -eq 1 ] && [ ! -z "$rpc_url" ]; then
     services_count=2
-    services_names="docker_aurad_1\|docker_mysql_1"
+    services_names="docker_idexd_1\|docker_mysql_1"
   else
     services_count=3
-    services_names="docker_aurad_1\|docker_parity_1\|docker_mysql_1"
+    services_names="docker_idexd_1\|docker_parity_1\|docker_mysql_1"
   fi
 }
 
 fetchAuradLogs()
 {
-  logs_aurad=$(aura logs -n aurad | tail -n 20)
+  logs_aurad=$(idex logs -n idexd | tail -n 20)
 }
 
 fetchAuradStatus()
 {
-  logs_aurad=$(timeout 15s aura status)
+  logs_aurad=$(timeout 15s idex status)
   if [ -z "$logs_aurad" ]; then
     stat_status=""
     stat_reason=""
@@ -89,7 +89,7 @@ fetchAuradStatus()
     tot_period_credit=""
     staked=""
     tot_staked=""
-    echo "Unable to get aura status..."
+    echo "Unable to get idex status..."
     return 1
   fi
   stat_status=""
@@ -178,7 +178,7 @@ waitAuradBlockSync()
       stuck_count=$((stuck_count+1))
       if [ $stuck_count -ge 10 ]; then
         echo "Aurad container block sync stuck. Restarting aurad cointainer."
-        docker restart docker_aurad_1
+        docker restart docker_idexd_1
         stuck_count=0
       fi
     else
@@ -198,9 +198,9 @@ waitAuradBlockSync()
 checkAuradPackageVersion()
 {
   if  [ -z "$current_pkg_version" ]; then
-    current_pkg_version=$(npm ls -g  @auroradao/aurad-cli | grep "@auroradao.aurad-cli" | cut -d '@' -f3 | tr -d '[:space:]')
+    current_pkg_version=$(npm ls -g  @idexio/idexd-cli | grep "@idexio/idexd-cli" | cut -d '@' -f3 | tr -d '[:space:]')
   fi
-  latest_pkg_version=$(npm dist-tag ls @auroradao/aurad-cli | cut -d ' ' -f2)
+  latest_pkg_version=$(npm dist-tag ls @idexio/idexd-cli | cut -d ' ' -f2)
   if [ ! -z "$latest_pkg_version" ] && [ ! -z "$current_pkg_version" ] && [ "$current_pkg_version" != "$latest_pkg_version" ]; then
     echo "New aurad package available ($latest_pkg_version)."
     if [ $update_notify -eq 1 ]; then
@@ -209,7 +209,7 @@ checkAuradPackageVersion()
     if [ $update_auto -eq 1 ]; then
       updateAura
     fi
-    current_pkg_version=$(npm ls -g  @auroradao/aurad-cli | grep "@auroradao.aurad-cli" | cut -d '@' -f3 | tr -d '[:space:]')
+    current_pkg_version=$(npm ls -g  @idexio/idexd-cli | grep "@idexio/idexd-cli" | cut -d '@' -f3 | tr -d '[:space:]')
   fi
 }
 
@@ -237,7 +237,7 @@ logStatistics()
     stat_parity_vmem=""
     stat_parity_mem=""
   fi
-  psout=$(ps -p $(pidof node aurad) -o %cpu,vsz,rss --no-headers)
+  psout=$(ps -p $(pidof node idexd) -o %cpu,vsz,rss --no-headers)
   if [ ! -z "$psout" ]; then
     stat_aurad_cpu=$(awk -F' ' '{printf "%.2f", $1}' <<< "$psout")
     stat_aurad_vmem=$(awk -F' ' '{printf "%.2f", $2/1024}' <<< "$psout")
@@ -300,11 +300,11 @@ logStatistics()
 
 startAura()
 {
-  if [[ $(docker ps --format "{{.Names}}"  --filter status=running | grep -c "docker_aurad_1") -lt 1 ]]; then
+  if [[ $(docker ps --format "{{.Names}}"  --filter status=running | grep -c "docker_idexd_1") -lt 1 ]]; then
     if [ $rpc_option -eq 1 ] && [ ! -z "$rpc_url" ]; then
-      aura start --rpc "$rpc_url"
+      idex start --rpc "$rpc_url"
     else
-      aura start
+      idex start
     fi
   else
     echo "Aurad container existed. Running on attach mode."
@@ -313,7 +313,7 @@ startAura()
 
 stopAura()
 {
-  aura stop
+  idex stop
 }
 
 restartAura()
@@ -325,7 +325,7 @@ restartAura()
 updateAura()
 {
   stopAura
-  npm install -g @auroradao/aurad-cli
+  npm install -g @idexio/idexd-cli
   startAura
 }
 

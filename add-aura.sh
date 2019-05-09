@@ -47,7 +47,7 @@ su $username << EOF
   cd "/home/$username/"
   source ".nvm/nvm.sh"
   nvm install 10.15
-  npm install -g @auroradao/aurad-cli
+  npm install -g @idexio/idexd-cli
 EOF
 
 mkdir "/home/$username/.auram/"
