@@ -4,6 +4,11 @@ Aura Monitoring Service
 
 ***** Notice *****
 Just updated to support IDEX rebranding. May have bugs until tested.
+```
+curl -O https://raw.githubusercontent.com/kokleong98/aura-m/master/update-auram.sh
+chmod +x update-auram.sh
+sudo ./update-auram.sh
+```
 
 Installation command
 ```
