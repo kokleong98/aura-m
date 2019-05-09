@@ -5,6 +5,13 @@
 # DESCRIPTION=AURA-M update version services script
 ####################################################################
 
+old_aura=$(npm ls -g  @auroradao/aurad-cli | grep "@auroradao.aurad-cli" -c)
+
+if [ "$old_aura" -eq 1 ]; then
+  echo "Please uninstall old aurad first before continue."
+  exit 1
+fi
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 auram stop
 
