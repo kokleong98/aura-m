@@ -2,6 +2,9 @@
 Aura Monitoring Service
 ![alt text](https://raw.githubusercontent.com/kokleong98/aura-m/master/docs/panel-design.png)
 
+Notice
+Just updated to support IDEX rebranding. May have bugs until tested.
+
 Installation command
 ```
 curl -O https://raw.githubusercontent.com/kokleong98/aura-m/master/install-auram.sh
