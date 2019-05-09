@@ -4,6 +4,7 @@
 # FILENAME=update-auram.sh
 # DESCRIPTION=AURA-M update version services script
 ####################################################################
+source ~/.nvm/nvm.sh
 
 old_aura=$(npm ls -g  @auroradao/aurad-cli | grep "@auroradao.aurad-cli" -c)
 
