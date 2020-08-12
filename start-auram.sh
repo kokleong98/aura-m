@@ -302,9 +302,9 @@ startAura()
 {
   if [[ $(docker ps --format "{{.Names}}"  --filter status=running | grep -c "docker_idexd_1") -lt 1 ]]; then
     if [ $rpc_option -eq 1 ] && [ ! -z "$rpc_url" ]; then
-      idex start --rpc "$rpc_url"
+      timeout 5m idex start --rpc "$rpc_url"
     else
-      idex start
+      timeout 5m idex start
     fi
   else
     echo "Aurad container existed. Running on attach mode."
