@@ -59,7 +59,9 @@ do
     BEGIN{FS="[{},:]+"}
     {
       totalcol=0
-
+      ccval=0.0
+      ctval=0.0
+      
       for (i = 3; i <= NF; i+=2)
       {
         recs[NR, substr($(i-1), 2, length($(i-1))-2)] = substr($i, 2, length($i)-2);
@@ -69,6 +71,8 @@ do
       {
         mindate=toDatetime(recs[NR, "t"]);
         maxdate=toDatetime(recs[NR, "t"]);
+        ccval=recs[NR, "cc"];
+        ctval=recs[NR, "ct"];
       }
       else
       {
@@ -76,6 +80,10 @@ do
           mindate=toDatetime(recs[NR, "t"]);
         if (maxdate < toDatetime(recs[NR, "t"]))
           maxdate=toDatetime(recs[NR, "t"]);
+        if (ccval < recs[NR, "cc"])
+          ccval=recs[NR, "cc"];
+        if (ctval < recs[NR, "ct"])
+          ctval=recs[NR, "ct"];
       }
       if(recs[NR, "s"] == "0")
       {
@@ -149,7 +157,7 @@ do
       cnt=defaultIfEmpty(cnt, 0)
 
       printf "{\"Date\":\"%s\",\"Online\":%s,\"Offline\":%s,\"NoStatus\":%s,\"Est\":%s,\"Miss\":%s", strftime("%Y-%m-%dT00:00:00.000Z", endtime), online, offline, nostat, cnt, miss
-      printf ",\"History\":[%s]}", json
+      printf ",\"History\":[%s], \"Credit\":%s, \"TotalCredit\":%s}", json, ccval, ctval
     }' "$DIR/stats/$curdate.txt"
     )
 
